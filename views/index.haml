@@ -1,0 +1,62 @@
+%html
+  %head
+    %title
+      Spot.fm - Generate Spotify artist links from your Last.fm favourite artists
+    %link{:rel => 'stylesheet',:href => '/css/spotkick.css'}
+  %body
+    #container
+      #header
+        %h1
+          %span.spotify> spot
+          %span> .
+          %span.lastfm fm
+      #content
+        Enter your
+        %a.lastfm{ :href => "http://lastfm.com", :target => "_new" }
+          Last.fm
+        username to get
+        %a.spotify{ :href => "http://spotify.com", :target => "_new" }
+          Spotify
+        links to your top artists:
+        %br
+        %br
+        %form{ :method => "get" }
+          %input{ :name => "username", :type => "text", :value => @username }
+          %input.button{ :type => "submit", :value => "spot.fm!" }
+        .message
+          = @message
+        - unless @username.nil? || !@message.blank?
+          %a.spotify{ :href => "http://spotify.com", :target => "_new" }
+            Spotify
+          links for
+          %a.lastfm{ :href => lastfm_url(@username), :target => "_new" }
+            = @username
+          's top artists:
+          %ul
+            - if @upcoming_artists.empty?
+              Last.fm profile not found
+            - else
+              - @upcoming_artists.each do |artist|
+                %li
+                  = spotify_artist_link(artist)
+      #footer
+        Built by
+        %a{:href => "http://twitter.com/andrewmcdonough", :target => "new", :class => "name"} Andrew McDonough
+        using
+        %a{:href => "http://ruby-lang.org", :target => "new"} Ruby
+        ,
+        %a{:href => "http://www.sinatrarb.com", :target => "new"} Sinatra
+        ,
+        %a{:href => "http://scrobbler.rubyforge.org", :target => "new"} Scrobbler
+        , 
+        %a{:href => "http://haml-lang.com/", :target => "new"} Haml
+        and
+        %a{:href => "http://github.com/philnash/meta-spotify", :target => "new"} meta-spotify
+        with data from
+        %a{:href => "http://lastfm.com", :target => "new"} Last.fm
+        and
+        %a{:href => "http://spotify.com", :target => "new"} Spotify
+        (source on
+        %a{:href => "http://github.com/andrewmcdonough/spotfm", :target => "new"} github
+        )
+    =erb(:analytics) rescue "" # Google analytics code - not checked in to github so ignore if not present
